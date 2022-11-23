@@ -14,6 +14,10 @@ GLfloat W = 1000, H = 1000;
 GLdouble theta = 45;
 GLfloat x = -20;
 GLfloat yLook = 1;
+GLfloat CutOff = 30;
+GLfloat Linear = 0.1;
+GLfloat Quadratic = 0.1;
+GLfloat Constant = 1.0;
 void idle()
 {
     glutPostRedisplay();
@@ -23,7 +27,7 @@ void oneCube(GLfloat x, GLfloat y, GLfloat z, GLfloat L)
 {
     glPushMatrix();
     glTranslated(x, y, z);
-    glutWireCube(L);
+    glutSolidCube(L);
     glPopMatrix();
 }
 
@@ -32,7 +36,7 @@ void oneRect(GLfloat x, GLfloat y, GLfloat z, GLfloat W, GLfloat H, GLfloat D)
     glPushMatrix();
     glTranslated(x, y, z);
     glScaled(W, H, D);
-    glutWireCube(1);
+    glutSolidCube(1);
     glPopMatrix();
 }
 
@@ -40,7 +44,7 @@ void oneSphere(GLfloat x, GLfloat y, GLfloat z, GLfloat R, GLint slices, GLint s
 {
     glPushMatrix();
     glTranslated(x, y, z);
-    glutWireSphere(R, slices, stacks);
+    glutSolidSphere(R, slices, stacks);
     glPopMatrix();
 }
 
@@ -49,7 +53,7 @@ void oneCone(GLfloat x, GLfloat y, GLfloat z, GLfloat R, GLfloat H, GLint slices
     glPushMatrix();
     glTranslated(x, y, z);
     glRotated(-90, 1, 0, 0);
-    glutWireCone(R, H, slices, stacks);
+    glutSolidCone(R, H, slices, stacks);
     glPopMatrix();
 }
 
@@ -125,7 +129,7 @@ void drawLamp(GLfloat dx, GLfloat dy, GLfloat dz)
     oneRect(dx, 0.025 + dy, dz, 0.2, 0.05, 0.2);
     oneRect(dx, 0.35 + dy, dz, 0.05, 0.6, 0.05);
     oneCone(dx, 0.7 + dy, dz, 0.1, 0.2, 10, 10);
-    oneSphere(dx, 0.7 + dy, dz, 0.05, 10, 10);
+    // oneSphere(dx, 0.7 + dy, dz, 0.05, 10, 10);
 }
 
 void drawSmallDesk (GLfloat dx, GLfloat dy, GLfloat dz)
@@ -138,31 +142,46 @@ void drawSmallDesk (GLfloat dx, GLfloat dy, GLfloat dz)
     oneSphere(dx, 0.275 + dy, dz, 0.05, 10, 10);
 }
 
+void addSpotLight() {
+    glPushMatrix();
+    glLightfv(GL_LIGHT0, GL_POSITION, (GLfloat[]){0.0, 2.0, 0.0, 1});
+    glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, (GLfloat[]){0.0, -1.0, 0.0});
+    glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 45);
+    glLightfv(GL_LIGHT0, GL_LINEAR_ATTENUATION, (GLfloat[]){2.6});
+    glLightfv(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, (GLfloat[]){0.6});
+    glLightfv(GL_LIGHT0, GL_CONSTANT_ATTENUATION, (GLfloat[]){1.0});
+    glPopMatrix();
+}
+
 void init(void)
 {
+    glClearColor(0, 0, 0, 0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+    addSpotLight();
     glEnable(GL_COLOR_MATERIAL);
     glShadeModel(GL_SMOOTH);
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glOrtho(-2.0, 2.0, -2.0, 2.0, -2.0, 100.0);
-}
-void draw()
-{
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glClearColor(1.0, 1.0, 1.0, 1.0);
+
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     gluLookAt(cos(theta), yLook, sin(theta), 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+}
+void draw()
+{
+    init();
     drawWall(0, 0, 0);
     drawSofa(0, 0.05, 0);
     drawTable(-0.6, 0.4, 0.1);
     drawMonitor(-0.6, 0.45, 0.1);
     drawKeyBoard(-0.6, 0.45, 0.1);
     drawSmallDesk(0.3, 0.05, 0);
-
     drawAxis();
+    // oneSphere(0, 0, 0, 1, 20, 20);
     // glFlush();
     glutSwapBuffers();
 }
@@ -182,7 +201,32 @@ void mySpecialKeys(int key, int x, int y)
     case 's':
         yLook -= 0.1;
         break;
+    case 'o':
+        CutOff += 2;
+        break;
+    case 'p':
+        CutOff -= 2;
+        break;
+    case 'k':
+        Linear += 0.1;
+        break;
+    case 'l':
+        Linear -= 0.1;
+        break;
+    case 'u':
+        Quadratic += 0.1;
+        break;
+    case 'i':
+        Quadratic -= 0.1;
+        break;
+    case 'h':
+        Constant += 0.1;
+        break;
+    case 'j':
+        Constant -= 0.1;
+        break;
     }
+    cout << "Cutoff: " << CutOff << "Linear" << Linear << "Quadratic" << Quadratic << "Constant" << Constant << endl;
     glutPostRedisplay();
 }
 int main(int argc, char **argv)
