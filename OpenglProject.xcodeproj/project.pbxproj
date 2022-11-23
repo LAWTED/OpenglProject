@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		9C3223A9292BD98100D45A60 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9C3223A8292BD98100D45A60 /* main.cpp */; };
+		9C3223B1292BD9CA00D45A60 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3223B0292BD9CA00D45A60 /* OpenGL.framework */; };
+		9C3223B3292BD9D700D45A60 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3223B2292BD9D700D45A60 /* GLUT.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +27,8 @@
 /* Begin PBXFileReference section */
 		9C3223A5292BD98100D45A60 /* OpenglProject */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OpenglProject; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C3223A8292BD98100D45A60 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		9C3223B0292BD9CA00D45A60 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		9C3223B2292BD9D700D45A60 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +36,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C3223B3292BD9D700D45A60 /* GLUT.framework in Frameworks */,
+				9C3223B1292BD9CA00D45A60 /* OpenGL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,6 +49,7 @@
 			children = (
 				9C3223A7292BD98100D45A60 /* OpenglProject */,
 				9C3223A6292BD98100D45A60 /* Products */,
+				9C3223AF292BD9CA00D45A60 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -60,6 +67,15 @@
 				9C3223A8292BD98100D45A60 /* main.cpp */,
 			);
 			path = OpenglProject;
+			sourceTree = "<group>";
+		};
+		9C3223AF292BD9CA00D45A60 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9C3223B2292BD9D700D45A60 /* GLUT.framework */,
+				9C3223B0292BD9CA00D45A60 /* OpenGL.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -171,6 +187,7 @@
 					"$(inherited)",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
@@ -223,6 +240,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
