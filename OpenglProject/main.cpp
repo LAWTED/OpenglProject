@@ -293,14 +293,22 @@ void addSpotLight()
 {
    glEnable(GL_LIGHT0);
    glPushMatrix();
-   glLightfv(GL_LIGHT0, GL_POSITION, (GLfloat[]){0.0, 2.0, 0.0, 1});
-   glLightfv(GL_LIGHT0, GL_AMBIENT, (GLfloat[]){0.2, 0.2, 0.2, 1});
-   glLightfv(GL_LIGHT0, GL_DIFFUSE, (GLfloat[]){0.5, 0.5, 0.5, 1});
-   glLightfv(GL_LIGHT0, GL_SPECULAR, (GLfloat[]){1, 0.5, 1, 1});
-   glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, (GLfloat[]){0.0, -1.0, 0.0});
-   glLightfv(GL_LIGHT0, GL_LINEAR_ATTENUATION, (GLfloat[]){1.0});
-   glLightfv(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, (GLfloat[]){0.6});
-   glLightfv(GL_LIGHT0, GL_CONSTANT_ATTENUATION, (GLfloat[]){1.0});
+   GLfloat lightPos[] = {0.0, 2.0, 0.0, 1 };
+   GLfloat lightAmb[] = {0.2, 0.2, 0.2, 1};
+   GLfloat lightDif[] = {0.5, 0.5, 0.5, 1};
+   GLfloat lightSpc[] = {1, 0.5, 1, 1};
+   GLfloat lightDir[] = {0.0, -1.0, 0.0};
+   GLfloat lightLinear[] = {1.0};
+   GLfloat lightQuadratic[] = {0.6};
+   GLfloat lightConstant[] = {1.0};
+   glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+   glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
+   glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDif);
+   glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpc);
+   glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, lightDir);
+   glLightfv(GL_LIGHT0, GL_LINEAR_ATTENUATION, lightLinear);
+   glLightfv(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, lightQuadratic);
+   glLightfv(GL_LIGHT0, GL_CONSTANT_ATTENUATION, lightConstant);
    glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 30);
    glPopMatrix();
 }
@@ -309,13 +317,20 @@ void addWallLight()
 {
    glEnable(GL_LIGHT1);
    glPushMatrix();
-   glLightfv(GL_LIGHT1, GL_POSITION, (GLfloat[]){-0.7, 0.7, -0.7, 1});
-   glLightfv(GL_LIGHT1, GL_AMBIENT, (GLfloat[]){0.5, 0.5, 1, 0.1});
-   glLightfv(GL_LIGHT1, GL_DIFFUSE, (GLfloat[]){0.5, 0.5, 0.5, 1});
-   glLightfv(GL_LIGHT1, GL_SPECULAR, (GLfloat[]){1, 0.5, 1, 1});
-   glLightfv(GL_LIGHT1, GL_LINEAR_ATTENUATION, (GLfloat[]){2000});
-   glLightfv(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, (GLfloat[]){0.6});
-   glLightfv(GL_LIGHT1, GL_CONSTANT_ATTENUATION, (GLfloat[]){1.0});
+   GLfloat lightPos[] = {-0.7, 0.7, -0.7, 1};
+   GLfloat lightAmb[] = {0.5, 0.5, 1, 0.1};
+   GLfloat lightDif[] = {0.5, 0.5, 0.5, 1};
+   GLfloat lightSpc[] = {1, 0.5, 1, 1};
+   GLfloat lightLinear[] = {2000};
+   GLfloat lightQuadratic[] = {0.6};
+   GLfloat lightConstant[] = {1.0};
+   glLightfv(GL_LIGHT1, GL_POSITION, lightPos);
+   glLightfv(GL_LIGHT1, GL_AMBIENT, lightAmb);
+   glLightfv(GL_LIGHT1, GL_DIFFUSE, lightDif);
+   glLightfv(GL_LIGHT1, GL_SPECULAR, lightSpc);
+   glLightfv(GL_LIGHT1, GL_LINEAR_ATTENUATION, lightLinear);
+   glLightfv(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, lightQuadratic);
+   glLightfv(GL_LIGHT1, GL_CONSTANT_ATTENUATION, lightConstant);
    glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 45);
    glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 2);
    glPopMatrix();
