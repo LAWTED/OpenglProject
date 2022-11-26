@@ -10,23 +10,21 @@ using namespace std;
 // GLfloat cloudLayer3[][2] = {{-0.1, 0.1}, {0.0, 0.1}, {-0.1, 0.0}, {0.0, 0.0}};
 
 GLfloat P = 0.1; // Pixel cube size
-GLfloat W = 1000, H = 1000;
-GLdouble theta = 45;
+GLfloat W = 650, H = 650;
+GLdouble theta = 57.3;
 GLfloat x = -20;
-GLfloat yLook = 1;
+GLfloat yLook = 0.4;
 GLfloat CutOff = 30;
-GLfloat Linear = 0.1;
-GLfloat Quadratic = 0.1;
-GLfloat Constant = 1.0;
 GLfloat fogY = 0.12;
+GLfloat armAngle = 0;
 bool fog = false;
 void idle()
 {
-   if (fogY > 0.18)
+   if (fogY > 0.30)
    {
       fog = false;
    }
-   if (fogY > 0.20)
+   if (fogY > 0.25)
    {
       fogY = 0.12;
       fog = true;
@@ -174,13 +172,13 @@ void drawSmallDesk(GLfloat dx, GLfloat dy, GLfloat dz)
 void drawCup(GLfloat dx, GLfloat dy, GLfloat dz)
 {
    glrgb(255, 255, 255);
-   oneRect(dx, 0.05 + dy, dz, 0.05, 0.1, 0.05);
+   oneRect(dx, 0.05 + dy, dz, 0.04, 0.1, 0.04);
 }
 
 void drawFog(GLfloat dx, GLfloat dy, GLfloat dz)
 {
 
-   glrgba(255, 255, 255, 0.8);
+   glrgba(255, 255, 255, 0.5);
    oneSphere(dx, fogY + dy, fogY / 10 + dz, fogY / 10, 20, 20);
    oneSphere(0.02 + dx, 0.06 + fogY / 2 + dy, fogY / 10 + dz, fogY / 20, 20, 20);
 }
@@ -217,11 +215,69 @@ void drawBody(GLfloat dx, GLfloat dy, GLfloat dz)
    oneRect(dx, 0.15 + dy, dz, 0.14, 0.2, 0.1);
    oneRect(dx, 0.3 + dy, dz, 0.16, 0.1, 0.12);
    glrgb(209, 188, 161);
-   oneRect(dx, 0.36 + dy, dz, 0.07, 0.05, 0.05);
-   oneRect(dx, 0.46 + dy, dz, 0.14, 0.18, 0.1);
-   oneRect(dx, 0.44 + dy, -0.06 + dz, 0.14, 0.22, 0.04);
+   oneRect(dx, 0.375 + dy, dz, 0.07, 0.05, 0.05);
+   oneRect(dx, 0.49 + dy, dz, 0.14, 0.18, 0.1);
+   oneRect(dx, 0.47 + dy, -0.06 + dz, 0.14, 0.22, 0.04);
    glrgb(0, 0, 0);
-   oneRect(dx, 0.56 + dy, -0.02 + dz, 0.18, 0.04, 0.14);
+   oneRect(dx, 0.59 + dy, -0.02 + dz, 0.18, 0.04, 0.14);
+}
+
+void drawArm(GLfloat dx, GLfloat dy, GLfloat dz) {
+   glrgb(209, 188, 161);
+   glPushMatrix();
+   glTranslated(-0.13 + dx, 0.28 + dy, 0.1 + dz);
+   glRotated(45, 0, 1, 0);
+   glRotated(20, 0, 0, 1);
+   glScaled(0.2, 0.06, 0.06);
+   glutSolidCube(1);
+   glPopMatrix();
+
+   glPushMatrix();
+   glTranslated(-0.25 + dx, 0.23 + dy, 0.1 + dz);
+   glRotated(-45, 0, 1, 0);
+   glRotated(10, 0, 0, 1);
+   glScaled(0.2, 0.05, 0.05);
+   glutSolidCube(1);
+   glPopMatrix();
+
+   glPushMatrix();
+   glTranslated(-0.3 + dx, 0.22 + dy, 0.04 + dz);
+   glScaled(0.06, 0.06, 0.06);
+   glRotated(45, 0, 1, 0);
+   glutSolidCube(1);
+   glPopMatrix();
+
+   glrgb(209, 188, 161);
+   glPushMatrix();
+   glTranslated(0.13 + dx, 0.24 + dy, dz);
+   glRotated(30, 0, 0, 1);
+   glScaled(0.06, 0.2, 0.06);
+   glutSolidCube(1);
+   glPopMatrix();
+
+}
+
+void drawMoveArm(GLfloat dx, GLfloat dy, GLfloat dz) {
+   glrgb(209, 188, 161);
+   glPushMatrix();
+   glTranslated(dx, dy, dz);
+   glRotated(45, 0, 0, 1);
+   glTranslated( 0, 0, 0.1);
+   glRotated(armAngle, 1, 0, 0);
+   glTranslated( 0, 0, -0.1);
+   glScaled(0.05, 0.05, 0.2);
+   glutSolidCube(1);
+   glPopMatrix();
+
+   glPushMatrix();
+   glTranslated( dx, dy, -0.11 + dz);
+   glRotated(45, 0, 0, 1);
+   glTranslated( 0, 0, 0.21);
+   glRotated(armAngle, 1, 0, 0);
+   glTranslated( 0, 0, -0.21);
+   glScaled(0.06, 0.06, 0.06);
+   glutSolidCube(1);
+   glPopMatrix();
 }
 
 void drawPerson(GLfloat dx, GLfloat dy, GLfloat dz)
@@ -229,6 +285,8 @@ void drawPerson(GLfloat dx, GLfloat dy, GLfloat dz)
    drawSmallLeg(dx, dy, dz);
    drawLargeLeg(dx, 0.2 + dy, 0.05 + dz);
    drawBody(dx, 0.2 + dy, 0.1 + dz);
+   drawArm(dx, 0.2 + dy, 0.1 + dz);
+   drawMoveArm(0.17 + dx, 0.37 + dy, dz);
 }
 
 void addSpotLight()
@@ -267,7 +325,7 @@ void addWallLight()
 
 void init(void)
 {
-   glClearColor(0, 0, 0, 0);
+   glClearColor(1,1,1,1);
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    glEnable(GL_LIGHTING);
 
@@ -278,7 +336,7 @@ void init(void)
 
    glMatrixMode(GL_PROJECTION);
    glLoadIdentity();
-   glOrtho(-2.0, 2.0, -2.0, 2.0, -2.0, 100.0);
+   glOrtho(-1.6, 1.6, -1.6, 1.6, -1.6, 100.0);
 
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();
@@ -291,6 +349,7 @@ void init(void)
 void draw()
 {
    init();
+   glTranslatef(0, -0.8, 0);
    drawWall(0, 0, 0);
    drawSofa(0, 0.05, 0);
    drawTable(-0.6, 0.4, 0.1);
@@ -321,32 +380,16 @@ void mySpecialKeys(int key, int x, int y)
    case 's':
       yLook -= 0.1;
       break;
-   case 'o':
-      CutOff += 2;
-      break;
-   case 'p':
-      CutOff -= 2;
+   case 'j':
+      if (armAngle < 30)
+         armAngle += 5;
       break;
    case 'k':
-      Linear += 0.1;
-      break;
-   case 'l':
-      Linear -= 0.1;
-      break;
-   case 'u':
-      Quadratic += 0.1;
-      break;
-   case 'i':
-      Quadratic -= 0.1;
-      break;
-   case 'h':
-      Constant += 0.1;
-      break;
-   case 'j':
-      Constant -= 0.1;
+      if (armAngle > -45 )
+         armAngle -= 5;
       break;
    }
-   cout << "Cutoff: " << CutOff << "Linear" << Linear << "Quadratic" << Quadratic << "Constant" << Constant << endl;
+   cout<< "theta: " << theta << " yLook: " << yLook << "armAngle" << armAngle << endl;
    glutPostRedisplay();
 }
 int main(int argc, char **argv)
@@ -355,6 +398,7 @@ int main(int argc, char **argv)
    glutInit(&argc, argv);
    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
    glutInitWindowSize(W, H);
+   glutInitWindowPosition(1000, 0);
    glutCreateWindow("Lawted's Home");
    glutDisplayFunc(draw);
    glutIdleFunc(idle);
