@@ -17,6 +17,7 @@ GLfloat yLook = 0.4;
 GLfloat CutOff = 30;
 GLfloat fogY = 0.12;
 GLfloat armAngle = 0;
+GLfloat deltaAngle = 1;
 bool fog = false;
 void idle()
 {
@@ -32,6 +33,15 @@ void idle()
    else
    {
       fogY += 0.001;
+   }
+   if (armAngle > 45) {
+      deltaAngle = -1;
+      armAngle += deltaAngle;
+   } else if (armAngle < -45) {
+      deltaAngle = 1;
+      armAngle += deltaAngle;
+   } else {
+      armAngle += deltaAngle;
    }
    glutPostRedisplay();
 }
