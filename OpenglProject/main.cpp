@@ -10,7 +10,7 @@ using namespace std;
 // GLfloat cloudLayer3[][2] = {{-0.1, 0.1}, {0.0, 0.1}, {-0.1, 0.0}, {0.0, 0.0}};
 
 GLfloat P = 0.1; // Pixel cube size
-GLfloat W = 650, H = 650;
+GLfloat W = 1000, H = 1000;
 GLdouble theta = 57.3;
 GLfloat x = -20;
 GLfloat yLook = 0.4;
@@ -18,6 +18,7 @@ GLfloat CutOff = 30;
 GLfloat fogY = 0.12;
 GLfloat armAngle = 0;
 GLfloat deltaAngle = 1;
+GLfloat tv = 0;
 bool fog = false;
 void idle()
 {
@@ -34,16 +35,35 @@ void idle()
    {
       fogY += 0.001;
    }
-   if (armAngle > 45) {
+   if (armAngle > 30)
+   {
       deltaAngle = -1;
-      armAngle += deltaAngle;
-   } else if (armAngle < -45) {
+      tv = 255;
+   }
+   if (armAngle < -45)
+   {
       deltaAngle = 1;
       armAngle += deltaAngle;
-   } else {
-      armAngle += deltaAngle;
+      tv = 0;
    }
+   armAngle += deltaAngle;
    glutPostRedisplay();
+}
+
+void reshape(GLsizei width, GLsizei height)
+{
+   if (height == 0)
+      height = 1;
+   GLfloat aspect = (GLfloat)width / (GLfloat)height;
+   glLoadIdentity();
+   if (width >= height)
+   {
+      gluOrtho2D(-1.0 * aspect, 1.0 * aspect, -1.0, 1.0);
+   }
+   else
+   {
+      gluOrtho2D(-1.0, 1.0, -1.0 / aspect, 1.0 / aspect);
+   }
 }
 
 void oneCube(GLfloat x, GLfloat y, GLfloat z, GLfloat L)
@@ -232,7 +252,8 @@ void drawBody(GLfloat dx, GLfloat dy, GLfloat dz)
    oneRect(dx, 0.59 + dy, -0.02 + dz, 0.18, 0.04, 0.14);
 }
 
-void drawArm(GLfloat dx, GLfloat dy, GLfloat dz) {
+void drawArm(GLfloat dx, GLfloat dy, GLfloat dz)
+{
    glrgb(209, 188, 161);
    glPushMatrix();
    glTranslated(-0.13 + dx, 0.28 + dy, 0.1 + dz);
@@ -264,28 +285,39 @@ void drawArm(GLfloat dx, GLfloat dy, GLfloat dz) {
    glScaled(0.06, 0.2, 0.06);
    glutSolidCube(1);
    glPopMatrix();
-
 }
 
-void drawMoveArm(GLfloat dx, GLfloat dy, GLfloat dz) {
+void drawMoveArm(GLfloat dx, GLfloat dy, GLfloat dz)
+{
    glrgb(209, 188, 161);
    glPushMatrix();
    glTranslated(dx, dy, dz);
    glRotated(45, 0, 0, 1);
-   glTranslated( 0, 0, 0.1);
+   glTranslated(0, 0, 0.1);
    glRotated(armAngle, 1, 0, 0);
-   glTranslated( 0, 0, -0.1);
+   glTranslated(0, 0, -0.1);
    glScaled(0.05, 0.05, 0.2);
    glutSolidCube(1);
    glPopMatrix();
 
    glPushMatrix();
-   glTranslated( dx, dy, -0.11 + dz);
+   glTranslated(dx, dy, -0.11 + dz);
    glRotated(45, 0, 0, 1);
-   glTranslated( 0, 0, 0.21);
+   glTranslated(0, 0, 0.21);
    glRotated(armAngle, 1, 0, 0);
-   glTranslated( 0, 0, -0.21);
+   glTranslated(0, 0, -0.21);
    glScaled(0.06, 0.06, 0.06);
+   glutSolidCube(1);
+   glPopMatrix();
+
+   glrgb(0, 0, 0);
+   glPushMatrix();
+   glTranslated(dx, dy, -0.18 + dz);
+   glRotated(45, 0, 0, 1);
+   glTranslated(0, 0, 0.28);
+   glRotated(armAngle, 1, 0, 0);
+   glTranslated(0, 0, -0.28);
+   glScaled(0.08, 0.02, 0.14);
    glutSolidCube(1);
    glPopMatrix();
 }
@@ -299,11 +331,21 @@ void drawPerson(GLfloat dx, GLfloat dy, GLfloat dz)
    drawMoveArm(0.17 + dx, 0.37 + dy, dz);
 }
 
+void drawTV(GLfloat dx, GLfloat dy, GLfloat dz)
+{
+   glrgb(163, 174, 185);
+   oneRect(dx, 0.6 + dy, dz, 1.0, 0.8, 0.1);
+   glrgb(tv, tv, tv);
+   oneRect(dx, 0.65 + dy, 0.06 + dz, 1.0, 0.7, 0.02);
+   glrgb(tv, 0, 0);
+   oneRect(0.45 + dx, 0.25 + dy, 0.06 + dz, 0.02, 0.02, 0.02);
+}
+
 void addSpotLight()
 {
    glEnable(GL_LIGHT0);
    glPushMatrix();
-   GLfloat lightPos[] = {0.0, 2.0, 0.0, 1 };
+   GLfloat lightPos[] = {0.0, 2.0, 0.0, 1};
    GLfloat lightAmb[] = {0.2, 0.2, 0.2, 1};
    GLfloat lightDif[] = {0.5, 0.5, 0.5, 1};
    GLfloat lightSpc[] = {1, 0.5, 1, 1};
@@ -346,11 +388,9 @@ void addWallLight()
    glPopMatrix();
 }
 
-
-
 void init(void)
 {
-   glClearColor(1,1,1,1);
+   glClearColor(1, 1, 1, 1);
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    glEnable(GL_LIGHTING);
 
@@ -386,6 +426,7 @@ void draw()
       drawFog(-0.6, 0.45, 0.4);
    drawSmallDesk(0.4, 0.05, 0);
    drawPerson(0.3, 0.05, 0.45);
+   drawTV(0.3, 0.05, -0.75);
    drawAxis();
    glutSwapBuffers();
 }
@@ -410,11 +451,11 @@ void mySpecialKeys(int key, int x, int y)
          armAngle += 5;
       break;
    case 'k':
-      if (armAngle > -45 )
+      if (armAngle > -45)
          armAngle -= 5;
       break;
    }
-   cout<< "theta: " << theta << " yLook: " << yLook << "armAngle" << armAngle << endl;
+   cout << "theta: " << theta << " yLook: " << yLook << "armAngle" << armAngle << endl;
    glutPostRedisplay();
 }
 int main(int argc, char **argv)
@@ -426,6 +467,7 @@ int main(int argc, char **argv)
    glutInitWindowPosition(1000, 0);
    glutCreateWindow("Lawted's Home");
    glutDisplayFunc(draw);
+   glutReshapeFunc(reshape);
    glutIdleFunc(idle);
    init();
    glutSpecialFunc(mySpecialKeys);
